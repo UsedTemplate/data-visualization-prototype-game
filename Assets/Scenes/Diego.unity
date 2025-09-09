@@ -723,6 +723,7 @@ MonoBehaviour:
   joystickRotation: {fileID: 1503661632}
   moveSpeed: 50
   mainCamera: {fileID: 1349458868}
+  currentRotation: {x: 0, y: 0, z: 0}
 --- !u!114 &1349458870
 MonoBehaviour:
   m_ObjectHideFlags: 0
