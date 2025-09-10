@@ -1,8 +1,4 @@
-using System.Runtime.CompilerServices;
-using TreeEditor;
-using Unity.Collections;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,9 +17,9 @@ public class GameManager : MonoBehaviour
     private RenderParams treeRP;
     private RenderParams leafRP;
 
-    private int xCount = 256;
-    private int zCount = 256;
-    private float spacing = 1f;
+    private int xCount = 200;
+    private int zCount = 200;
+    private float spacing = 1.28f;
 
     void Start()
     {
