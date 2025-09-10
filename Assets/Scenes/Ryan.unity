@@ -1493,7 +1493,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1978221698}
-  - component: {fileID: 1978221697}
   - component: {fileID: 1978221699}
   m_Layer: 0
   m_Name: GameManager
@@ -1502,19 +1501,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1978221697
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1978221695}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71a76314bd15b3d44abaf00aea525409, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridParent: {fileID: 0}
 --- !u!4 &1978221698
 Transform:
   m_ObjectHideFlags: 0
@@ -1545,7 +1531,11 @@ MonoBehaviour:
   meshTree: {fileID: 4781277628412113339, guid: 129c5dcf9506437408a63f7c2736ae4f, type: 3}
   materialTree: {fileID: 2100000, guid: af3ab87f519a90b47b20a7d07acd37b0, type: 2}
   meshLeaf: {fileID: 766207002214816160, guid: 129c5dcf9506437408a63f7c2736ae4f, type: 3}
-  materialLeaf: {fileID: 2100000, guid: 123f101927f051e4c9bb03a6167e613a, type: 2}
+  materialLeaf1: {fileID: 2100000, guid: 123f101927f051e4c9bb03a6167e613a, type: 2}
+  materialLeaf2: {fileID: 2100000, guid: 077ef4a1fe2902a40b08aebfc93fc8ba, type: 2}
+  materialLeaf3: {fileID: 2100000, guid: be2bdbd8b4c54de4782c5e73e3a649b3, type: 2}
+  materialLeaf4: {fileID: 2100000, guid: 1fb7d474c76150b40bdb9612e02a2fcf, type: 2}
+  materialLeaf5: {fileID: 2100000, guid: 3ccabad5d46f39a43ad0180b365c4a1f, type: 2}
   gridParent: {fileID: 1640695379}
 --- !u!1001 &2029050158
 PrefabInstance:
