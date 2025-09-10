@@ -2,40 +2,38 @@ using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine;
 
-public class DataAPI : MonoBehaviour
+public class DataAPI
 {
-    public static DataAPI Instance { get; private set; }
+    public string baseUrl;
 
-    private void Awake()
+    // Constructor
+    public DataAPI(string baseUrl)
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-        }
+        this.baseUrl = baseUrl;
     }
 
-    public IEnumerator GetRequest(string uri, System.Action<User[]> onComplete)
+    // Example: endpoint = "/users"
+    public IEnumerator GetRequest(string endpoint, System.Action<User[]> onComplete)
     {
+        string uri = baseUrl + endpoint;
+
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
             yield return webRequest.SendWebRequest();
-
-            string[] pages = uri.Split('/');
-            int page = pages.Length - 1;
 
             switch (webRequest.result)
             {
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
-                    Debug.LogError(pages[page] + ": Error: " + webRequest.error);
+                    Debug.LogError($"[DataAPI] Error: {webRequest.error}");
+                    onComplete?.Invoke(null);
                     break;
+
                 case UnityWebRequest.Result.ProtocolError:
-                    Debug.LogError(pages[page] + ": HTTP Error: " + webRequest.error);
+                    Debug.LogError($"[DataAPI] HTTP Error: {webRequest.error}");
+                    onComplete?.Invoke(null);
                     break;
+
                 case UnityWebRequest.Result.Success:
                     string json = webRequest.downloadHandler.text;
 
@@ -49,12 +47,10 @@ public class DataAPI : MonoBehaviour
                     }
                     catch (System.Exception e)
                     {
-                        Debug.LogError("JSON parse error: " + e);
+                        Debug.LogError("[DataAPI] JSON parse error: " + e);
                         onComplete?.Invoke(null);
                     }
-
                     break;
-
             }
         }
     }

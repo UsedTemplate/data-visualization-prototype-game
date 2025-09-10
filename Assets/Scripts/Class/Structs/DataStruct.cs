@@ -5,8 +5,8 @@ public class User
     public string gender;
     public float weight;
     public float height;
-    public float depression;
-    public float burnout;
+    public float depression = -1;
+    public float burnout = -1;
     public float alchohol_intake;
 }
 
