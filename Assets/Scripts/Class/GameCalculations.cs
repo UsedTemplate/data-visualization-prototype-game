@@ -26,3 +26,15 @@ public static class GameCalculations
         return stage + 1;
     }
 }
+
+public class AgeMatrixData
+{
+    public int AgeStage;       // 1–5
+    public Matrix4x4 Matrix;   // Transformation matrix
+
+    public AgeMatrixData(int stage, Matrix4x4 matrix)
+    {
+        AgeStage = stage;
+        Matrix = matrix;
+    }
+}
