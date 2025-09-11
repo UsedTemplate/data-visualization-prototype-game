@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform gridParent;
 
     private List<Matrix4x4>[] stageMatrices;
+    private List<Matrix4x4>[] filteredMatrices;
 
     private RenderParams treeRP;
 
@@ -29,8 +30,6 @@ public class GameManager : MonoBehaviour
     private Moods lastMoodFilter;
 
     private List<User>[] stageUsers;
-
-
 
     void Start()
     {
@@ -154,28 +153,34 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private List<Matrix4x4>[] filteredMatrices;
-
     private void Update()
     {
         if (stageMatrices == null) return;
 
-        // Create filtered matrices for rendering
-        List<Matrix4x4>[] filteredMatrices = new List<Matrix4x4>[7];
-        for (int s = 0; s < 7; s++)
-            filteredMatrices[s] = new List<Matrix4x4>();
-
-        for (int s = 0; s < 7; s++)
+        // Only rebuild filtered matrices if filters have changed
+        if (filteredMatrices == null || FiltersChanged())
         {
-            for (int i = 0; i < stageMatrices[s].Count; i++)
+            // Initialize filtered matrices
+            filteredMatrices = new List<Matrix4x4>[7];
+            for (int s = 0; s < 7; s++)
+                filteredMatrices[s] = new List<Matrix4x4>();
+
+            // Apply filters
+            for (int s = 0; s < 7; s++)
             {
-                User user = stageUsers[s][i]; // Correct user for this matrix
-                if (PassesFilters(user))
-                    filteredMatrices[s].Add(stageMatrices[s][i]);
+                for (int i = 0; i < stageMatrices[s].Count; i++)
+                {
+                    User user = stageUsers[s][i]; // Correct user for this matrix
+                    if (PassesFilters(user))
+                        filteredMatrices[s].Add(stageMatrices[s][i]);
+                }
             }
+
+            // Update filter tracking values
+            UpdateFilterTracking();
         }
 
-        // Render filtered matrices
+        // Render filtered matrices (every frame)
         RenderStage(meshTree1, filteredMatrices[0]);
         RenderStage(meshTree2, filteredMatrices[1]);
         RenderStage(meshTree3, filteredMatrices[2]);
@@ -184,4 +189,5 @@ public class GameManager : MonoBehaviour
         RenderStage(meshTreeDepression, filteredMatrices[5]);
         RenderStage(meshTreeBurnout, filteredMatrices[6]);
     }
+
 }
