@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Mesh meshTree3;
     [SerializeField] private Mesh meshTree4;
     [SerializeField] private Mesh meshTree5;
+    [SerializeField] private Mesh meshTreeDepression;
+    [SerializeField] private Mesh meshTreeBurnout;
     [SerializeField] private Material materialTree;
     [SerializeField] private Transform gridParent;
 
@@ -41,7 +43,7 @@ public class GameManager : MonoBehaviour
     {
         Vector3[,] gridPositions = GridGenerator.GenerateGridPositions(xCount, zCount, spacing, spacing, gridParent);
 
-        stageMatrices = new List<Matrix4x4>[5];
+        stageMatrices = new List<Matrix4x4>[7];
         for (int s = 0; s < stageMatrices.Length; s++)
             stageMatrices[s] = new List<Matrix4x4>();
 
@@ -61,6 +63,18 @@ public class GameManager : MonoBehaviour
                 Matrix4x4 trs = Matrix4x4.TRS(pos, rot, size);
 
                 int stage = GameCalculations.GetStageFromAge(user.age) - 1; // 0-4
+                if (user.depression > 0.01f)
+                {
+                    stageMatrices[5].Add(trs);
+                    continue;
+                }
+
+                if (user.burnout > 0.01f)
+                {
+                    stageMatrices[6].Add(trs);
+                    continue;
+                }
+
                 stageMatrices[stage].Add(trs);
             }
         }
@@ -85,5 +99,7 @@ public class GameManager : MonoBehaviour
         RenderStage(meshTree3, stageMatrices[2]);
         RenderStage(meshTree4, stageMatrices[3]);
         RenderStage(meshTree5, stageMatrices[4]);
+        RenderStage(meshTreeDepression, stageMatrices[5]);
+        RenderStage(meshTreeBurnout, stageMatrices[6]);
     }
 }
