@@ -197,6 +197,7 @@ public class UIController : MonoBehaviour
 		Slider_Age.interactable = isOn;
 		AgeBoolValue = isOn ? 1 : 0;
 		if (AgeBoolValue == 0) FilterSettings.AgeFilter = 0;
+		else FilterSettings.AgeFilter = Slider_Age.value;
 	}
 	void OnAgeSlider(float value)
 	{
@@ -208,7 +209,8 @@ public class UIController : MonoBehaviour
 	{
 		Slider_Weight.interactable = isOn;
 		WeightBoolValue = isOn ? 1 : 0;
-		if(WeightBoolValue == 0) FilterSettings.WeightFilter = 0;
+		if (WeightBoolValue == 0) FilterSettings.WeightFilter = 0;
+		else FilterSettings.WeightFilter = Slider_Weight.value;
 	}
 	void OnWeightSlider(float value)
 	{
@@ -221,6 +223,7 @@ public class UIController : MonoBehaviour
 		Slider_Height.interactable = isOn;
 		HeightBoolValue = isOn ? 1 : 0;
 		if (HeightBoolValue == 0) FilterSettings.HeightFilter = 0;
+		else FilterSettings.HeightFilter = Slider_Height.value;
 	}
 	void OnHeightSlider(float value)
 	{
@@ -233,6 +236,7 @@ public class UIController : MonoBehaviour
 		Slider_Alcohol.interactable = isOn;
 		AlcoholBoolValue = isOn ? 1 : 0;
 		if (AlcoholBoolValue == 0) FilterSettings.AlchoholIntakeFilter = 0;
+		else FilterSettings.AlchoholIntakeFilter = Slider_Alcohol.value;
 	}
 	void OnAlcoholSlider(float value)
 	{
