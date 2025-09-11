@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public static class FilterSeettings
+public static class FilterSettings
 {
     static float AgeFilter;
     static float WeightFilter;
