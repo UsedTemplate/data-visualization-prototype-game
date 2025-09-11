@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -9,21 +10,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Mesh meshTree5;
     [SerializeField] private Material materialTree;
     [SerializeField] private Transform gridParent;
-    private Vector3[] treeOffsets;
-    private Quaternion[] treeOrientations;
 
-    private Matrix4x4[] treeMatrices1;
-    private Matrix4x4[] treeMatrices2;
-    private Matrix4x4[] treeMatrices3;
-    private Matrix4x4[] treeMatrices4;
-    private Matrix4x4[] treeMatrices5;
-
-    private Vector3[] treePositions;
+    private List<Matrix4x4>[] stageMatrices;
     private RenderParams treeRP;
 
-    private int xCount = 145;
-    private int zCount = 145;
-    private float spacing = 2f;
+    private int xCount = 185;
+    private int zCount = 185;
+    private float spacing = 1.55f;
 
     DataAPI api = new DataAPI("http://localhost:3069");
     User[] users;
@@ -48,65 +41,49 @@ public class GameManager : MonoBehaviour
     {
         Vector3[,] gridPositions = GridGenerator.GenerateGridPositions(xCount, zCount, spacing, spacing, gridParent);
 
-        int count = xCount * zCount;
-
-        treePositions = new Vector3[count];
-        treeOffsets = new Vector3[count];
-
-        treeOrientations = new Quaternion[count];
-
-        treeMatrices1 = new Matrix4x4[count];
-        treeMatrices2 = new Matrix4x4[count];
-        treeMatrices3 = new Matrix4x4[count];
-        treeMatrices4 = new Matrix4x4[count];
-        treeMatrices5 = new Matrix4x4[count];
+        stageMatrices = new List<Matrix4x4>[5];
+        for (int s = 0; s < stageMatrices.Length; s++)
+            stageMatrices[s] = new List<Matrix4x4>();
 
         for (int z = 0; z < gridPositions.GetLength(0); z++)
         {
             for (int x = 0; x < gridPositions.GetLength(1); x++)
             {
                 int i = z * gridPositions.GetLength(1) + x;
+                User user = users[i];
 
-                treeOffsets[i] = Vector3.zero;
-                treePositions[i] = gridPositions[z, x] + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
+                Vector3 pos = gridPositions[z, x] + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
+                Quaternion rot = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
 
-                Quaternion randomYRotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
-                treeOrientations[i] = randomYRotation;
+                float scale = GameCalculations.MapExponential(user.height);
+                Vector3 size = GameCalculations.ScaleToVector3(scale);
+
+                Matrix4x4 trs = Matrix4x4.TRS(pos, rot, size);
+
+                int stage = GameCalculations.GetStageFromAge(user.age) - 1; // 0-4
+                stageMatrices[stage].Add(trs);
             }
         }
 
         treeRP = new RenderParams(materialTree);
     }
 
-    private void RenderTrees()
+    private void RenderStage(Mesh mesh, List<Matrix4x4> matrices)
     {
-        if (treePositions.Length <= 0) return;
-        for (var i = 0; i < treePositions.Length; i++)
+        int batchSize = 1023;
+        for (int i = 0; i < matrices.Count; i += batchSize)
         {
-            User user = users[i];
-            float height = user.height;
-            float scale = GameCalculations.MapExponential(height);
-            Vector3 size = GameCalculations.ScaleToVector3(scale);
-
-            switch (GameCalculations.GetStageFromAge(user.age))
-            {
-                case 1: treeMatrices1[i].SetTRS(treePositions[i], treeOrientations[i], size); break;
-                case 2: treeMatrices2[i].SetTRS(treePositions[i], treeOrientations[i], size); break;
-                case 3: treeMatrices3[i].SetTRS(treePositions[i], treeOrientations[i], size); break;
-                case 4: treeMatrices4[i].SetTRS(treePositions[i], treeOrientations[i], size); break;
-                case 5: treeMatrices5[i].SetTRS(treePositions[i], treeOrientations[i], size); break;
-            }
+            int count = Mathf.Min(batchSize, matrices.Count - i);
+            Graphics.RenderMeshInstanced(treeRP, mesh, 0, matrices.GetRange(i, count).ToArray());
         }
-
-        Graphics.RenderMeshInstanced(treeRP, meshTree1, 0, treeMatrices1);
-        Graphics.RenderMeshInstanced(treeRP, meshTree2, 0, treeMatrices2);
-        Graphics.RenderMeshInstanced(treeRP, meshTree3, 0, treeMatrices3);
-        Graphics.RenderMeshInstanced(treeRP, meshTree4, 0, treeMatrices4);
-        Graphics.RenderMeshInstanced(treeRP, meshTree5, 0, treeMatrices5);
     }
 
     private void Update()
     {
-        RenderTrees();
+        RenderStage(meshTree1, stageMatrices[0]);
+        RenderStage(meshTree2, stageMatrices[1]);
+        RenderStage(meshTree3, stageMatrices[2]);
+        RenderStage(meshTree4, stageMatrices[3]);
+        RenderStage(meshTree5, stageMatrices[4]);
     }
 }
