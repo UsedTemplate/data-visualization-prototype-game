@@ -55,11 +55,15 @@ public class UIController : MonoBehaviour
 	[Header("BurnoutFilter")]
 	public Toggle Toggle_Burnout;
 
+	[Space]
+	public Transform LeftJoystick;
+
 	private void Start()
 	{
 		SetupGenderDropdown();
 	}
 
+	//Adding all functions for the UI by script
 	private void OnEnable()
 	{
 		if (Button_FilterMenu != null) Button_FilterMenu.onClick.AddListener(OnFilterMenuButton);
@@ -93,12 +97,15 @@ public class UIController : MonoBehaviour
 		if (Dropdown_Gender != null) Dropdown_Gender.onValueChanged.RemoveAllListeners();
 	}
 
+	//Open and close filter menu by toggle
 	void OnFilterMenuButton()
 	{
 		_filterToggle = !_filterToggle;
 		FilterMenu.SetActive(_filterToggle);
+		LeftJoystick.position = _filterToggle ? new Vector3(1060, LeftJoystick.position.y, LeftJoystick.position.z) : new Vector3(256, LeftJoystick.position.y, LeftJoystick.position.z);
 	}
 
+	//Filter for gender by dropdown method
 	void SetupGenderDropdown()
 	{
 		if (Dropdown_Gender == null) return;
@@ -134,19 +141,16 @@ public class UIController : MonoBehaviour
 		}
 	}
 
+	//All toggle and slider filters
 	void OnAgeToggle(bool isOn) => Slider_Age.interactable = isOn;
-
 	void OnAgeSlider(float value) => ValueText_Age.text = value.ToString();
 
 	void OnWeightToggle(bool isOn) => Slider_Weight.interactable = isOn;
-
 	void OnWeightSlider(float value) => ValueText_Weight.text = value + "kg".ToString();
 
 	void OnHeightToggle(bool isOn) => Slider_Height.interactable = isOn;
-
 	void OnHeightSlider(float value) => ValueText_Height.text = value + "cm".ToString();
 
 	void OnAlcoholToggle(bool isOn) => Slider_Alcohol.interactable = isOn;
-
 	void OnAlcoholSlider(float value) => ValueText_Alcohol.text = value + "g".ToString();
 }
