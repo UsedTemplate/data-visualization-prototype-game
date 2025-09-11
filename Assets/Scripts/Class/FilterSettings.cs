@@ -2,10 +2,11 @@ using UnityEngine;
 
 public static class FilterSettings
 {
-    static float AgeFilter;
-    static float WeightFilter;
-    static float HeightFilter;
-    static float AlchoholIntakeFilter;
-    static Genders GenderFilter;
+    public static float AgeFilter;
+    public static float WeightFilter;
+    public static float HeightFilter;
+    public static float AlchoholIntakeFilter;
+    public static Genders GenderFilter;
+    public static Moods MoodFilter;
     
 }
