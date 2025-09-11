@@ -2109,7 +2109,6 @@ MonoBehaviour:
   Toggle_Age: {fileID: 1254712067}
   Slider_Age: {fileID: 1083013522}
   ValueText_Age: {fileID: 1697249705}
-  Dropdown_Gender: {fileID: 728635047}
   Toggle_Weight: {fileID: 1785647845}
   Slider_Weight: {fileID: 1756753164}
   ValueText_Weight: {fileID: 122164197}
@@ -2119,8 +2118,8 @@ MonoBehaviour:
   Toggle_Alcohol: {fileID: 956060047}
   Slider_Alcohol: {fileID: 260413214}
   ValueText_Alcohol: {fileID: 616197203}
-  Toggle_Depression: {fileID: 1277710736}
-  Toggle_Burnout: {fileID: 1228281582}
+  Dropdown_Gender: {fileID: 728635047}
+  Dropdown_Mood: {fileID: 0}
   LeftJoystick: {fileID: 913488785}
 --- !u!114 &569059405
 MonoBehaviour:
@@ -6112,7 +6111,7 @@ Transform:
   m_GameObject: {fileID: 1640695378}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

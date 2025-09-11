@@ -63,13 +63,13 @@ public class GameManager : MonoBehaviour
                 Matrix4x4 trs = Matrix4x4.TRS(pos, rot, size);
 
                 int stage = GameCalculations.GetStageFromAge(user.age) - 1; // 0-4
-                if (user.depression > 0.01f)
+                if (user.depression > 0f)
                 {
                     stageMatrices[5].Add(trs);
                     continue;
                 }
 
-                if (user.burnout > 0.01f)
+                if (user.burnout > 0f)
                 {
                     stageMatrices[6].Add(trs);
                     continue;
@@ -94,6 +94,8 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (stageMatrices == null) return; // Wait until data is initialized
+
         RenderStage(meshTree1, stageMatrices[0]);
         RenderStage(meshTree2, stageMatrices[1]);
         RenderStage(meshTree3, stageMatrices[2]);
