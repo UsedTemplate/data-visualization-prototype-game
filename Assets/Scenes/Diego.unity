@@ -4491,7 +4491,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: -3035101939719975992, guid: e34ab2337b0716f41ba6cd304eae19fe, type: 3}
+  m_MaterialTemplate: {fileID: 2100000, guid: 5d31e61897dd8954da7c98383a15d707, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -7638,16 +7638,8 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 7119704244507837109, guid: 20801ef420b285e44af54eb7c38f2ad5, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7119704244507837109, guid: 20801ef420b285e44af54eb7c38f2ad5, type: 3}
       propertyPath: m_LocalScale.y
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7119704244507837109, guid: 20801ef420b285e44af54eb7c38f2ad5, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7119704244507837109, guid: 20801ef420b285e44af54eb7c38f2ad5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7687,10 +7679,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7119704244507837109, guid: 20801ef420b285e44af54eb7c38f2ad5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7119704244507837109, guid: 20801ef420b285e44af54eb7c38f2ad5, type: 3}
-      propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7603648357823371279, guid: 20801ef420b285e44af54eb7c38f2ad5, type: 3}
