@@ -24,6 +24,14 @@ public class GameManager : MonoBehaviour
     DataAPI api = new DataAPI("http://localhost:3069");
     User[] users;
 
+    private float lastAgeFilter, lastWeightFilter, lastHeightFilter, lastAlcoholFilter;
+    private Genders lastGenderFilter;
+    private Moods lastMoodFilter;
+
+    private List<User>[] stageUsers;
+
+
+
     void Start()
     {
         StartCoroutine(api.GetRequest("/retrieveAll", (_users) =>
@@ -38,6 +46,26 @@ public class GameManager : MonoBehaviour
                 Debug.LogError("Failed to load trees");
             }
         }));
+    }
+
+    private bool FiltersChanged()
+    {
+        return FilterSettings.AgeFilter != lastAgeFilter ||
+            FilterSettings.WeightFilter != lastWeightFilter ||
+            FilterSettings.HeightFilter != lastHeightFilter ||
+            FilterSettings.AlchoholIntakeFilter != lastAlcoholFilter ||
+            FilterSettings.GenderFilter != lastGenderFilter ||
+            FilterSettings.MoodFilter != lastMoodFilter;
+    }
+
+    private void UpdateFilterTracking()
+    {
+        lastAgeFilter = FilterSettings.AgeFilter;
+        lastWeightFilter = FilterSettings.WeightFilter;
+        lastHeightFilter = FilterSettings.HeightFilter;
+        lastAlcoholFilter = FilterSettings.AlchoholIntakeFilter;
+        lastGenderFilter = FilterSettings.GenderFilter;
+        lastMoodFilter = FilterSettings.MoodFilter;
     }
 
     private bool PassesFilters(User user)
@@ -80,8 +108,13 @@ public class GameManager : MonoBehaviour
         Vector3[,] gridPositions = GridGenerator.GenerateGridPositions(xCount, zCount, spacing, spacing, gridParent);
 
         stageMatrices = new List<Matrix4x4>[7];
+        stageUsers = new List<User>[7];
+
         for (int s = 0; s < stageMatrices.Length; s++)
+        {
             stageMatrices[s] = new List<Matrix4x4>();
+            stageUsers[s] = new List<User>();   
+        }
 
         for (int z = 0; z < gridPositions.GetLength(0); z++)
         {
@@ -100,18 +133,11 @@ public class GameManager : MonoBehaviour
                 Matrix4x4 trs = Matrix4x4.TRS(pos, rot, size);
 
                 int stage = GameCalculations.GetStageFromAge(user.age) - 1; // 0-4
-                if (user.depression > 0f)
-                {
-                    stageMatrices[5].Add(trs);
-                    continue;
-                }
-                if (user.burnout > 0f)
-                {
-                    stageMatrices[6].Add(trs);
-                    continue;
-                }
+                if (user.depression > 0f) stage = 5;
+                else if (user.burnout > 0f) stage = 6;
 
                 stageMatrices[stage].Add(trs);
+                stageUsers[stage].Add(user); // Keep user aligned with its TRS
             }
         }
 
@@ -128,50 +154,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private List<Matrix4x4>[] filteredMatrices;
+
     private void Update()
     {
-        if (stageMatrices == null || users == null) return;
+        if (stageMatrices == null) return;
 
-        // Clear filtered stage matrices for this frame
+        // Create filtered matrices for rendering
         List<Matrix4x4>[] filteredMatrices = new List<Matrix4x4>[7];
-        for (int s = 0; s < filteredMatrices.Length; s++)
+        for (int s = 0; s < 7; s++)
             filteredMatrices[s] = new List<Matrix4x4>();
 
-        int userIndex = 0; // Track which user corresponds to which matrix in stageMatrices
-
-        for (int stage = 0; stage < 5; stage++) // Normal stages 0-4
+        for (int s = 0; s < 7; s++)
         {
-            for (int i = 0; i < stageMatrices[stage].Count; i++)
+            for (int i = 0; i < stageMatrices[s].Count; i++)
             {
-                User user = users[userIndex];
+                User user = stageUsers[s][i]; // Correct user for this matrix
                 if (PassesFilters(user))
-                    filteredMatrices[stage].Add(stageMatrices[stage][i]);
-
-                userIndex++;
+                    filteredMatrices[s].Add(stageMatrices[s][i]);
             }
         }
 
-        // Depression trees
-        for (int i = 0; i < stageMatrices[5].Count; i++)
-        {
-            User user = users[userIndex];
-            if (PassesFilters(user))
-                filteredMatrices[5].Add(stageMatrices[5][i]);
-
-            userIndex++;
-        }
-
-        // Burnout trees
-        for (int i = 0; i < stageMatrices[6].Count; i++)
-        {
-            User user = users[userIndex];
-            if (PassesFilters(user))
-                filteredMatrices[6].Add(stageMatrices[6][i]);
-
-            userIndex++;
-        }
-
-        // Render using filtered matrices
+        // Render filtered matrices
         RenderStage(meshTree1, filteredMatrices[0]);
         RenderStage(meshTree2, filteredMatrices[1]);
         RenderStage(meshTree3, filteredMatrices[2]);
