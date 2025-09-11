@@ -198,7 +198,11 @@ public class UIController : MonoBehaviour
 		AgeBoolValue = isOn ? 1 : 0;
 		if (AgeBoolValue == 0) FilterSettings.AgeFilter = 0;
 	}
-	void OnAgeSlider(float value) => ValueText_Age.text = value.ToString();
+	void OnAgeSlider(float value)
+	{
+		ValueText_Age.text = value.ToString();
+		if(AgeBoolValue == 1) FilterSettings.AgeFilter = value;
+	}
 
 	void OnWeightToggle(bool isOn)
 	{
@@ -206,7 +210,11 @@ public class UIController : MonoBehaviour
 		WeightBoolValue = isOn ? 1 : 0;
 		if(WeightBoolValue == 0) FilterSettings.WeightFilter = 0;
 	}
-	void OnWeightSlider(float value) => ValueText_Weight.text = value + "kg".ToString();
+	void OnWeightSlider(float value)
+	{
+		ValueText_Weight.text = value + "kg".ToString();
+		if(WeightBoolValue == 1) FilterSettings.WeightFilter = value;
+	}
 
 	void OnHeightToggle(bool isOn)
 	{
@@ -214,7 +222,10 @@ public class UIController : MonoBehaviour
 		HeightBoolValue = isOn ? 1 : 0;
 		if (HeightBoolValue == 0) FilterSettings.HeightFilter = 0;
 	}
-	void OnHeightSlider(float value) => ValueText_Height.text = value + "cm".ToString();
+	void OnHeightSlider(float value)
+	{
+		if(HeightBoolValue == 1) FilterSettings.HeightFilter = value;
+	}
 
 	void OnAlcoholToggle(bool isOn)
 	{
@@ -222,5 +233,9 @@ public class UIController : MonoBehaviour
 		AlcoholBoolValue = isOn ? 1 : 0;
 		if (AlcoholBoolValue == 0) FilterSettings.AlchoholIntakeFilter = 0;
 	}
-	void OnAlcoholSlider(float value) => ValueText_Alcohol.text = value + "g".ToString();
+	void OnAlcoholSlider(float value)
+	{
+		ValueText_Alcohol.text = value + "g".ToString();
+		if(AlcoholBoolValue == 1) FilterSettings.AlchoholIntakeFilter = value;
+	}
 }
