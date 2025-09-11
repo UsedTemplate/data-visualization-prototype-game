@@ -224,6 +224,7 @@ public class UIController : MonoBehaviour
 	}
 	void OnHeightSlider(float value)
 	{
+		ValueText_Height.text = value + "cm".ToString();
 		if(HeightBoolValue == 1) FilterSettings.HeightFilter = value;
 	}
 
