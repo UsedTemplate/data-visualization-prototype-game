@@ -20,4 +20,12 @@ public class GridGenerator
 
         return positions;
     }
+    public static Vector3 GetGridPosition(int index, int xCount, int zCount, float spacing, Transform origin = null)
+    {
+        int x = index % xCount;
+        int z = index / xCount;
+        Vector3 startPos = origin != null ? origin.position : Vector3.zero;
+        return startPos + new Vector3(x * spacing, 0, z * spacing);
+    }
+
 }
