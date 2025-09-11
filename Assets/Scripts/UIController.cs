@@ -12,6 +12,13 @@ public enum Genders
 	Female
 }
 
+public enum Moods
+{
+	None,
+	Depression,
+	Burnout
+}
+
 public class UIController : MonoBehaviour
 {
 	[Header("FilterMenuButton")]
@@ -24,10 +31,6 @@ public class UIController : MonoBehaviour
 	public Toggle Toggle_Age;
 	public Slider Slider_Age;
 	public TextMeshProUGUI ValueText_Age;
-
-	[Space]
-	[Header("GenderFilter")]
-	public TMP_Dropdown Dropdown_Gender;
 
 	[Space]
 	[Header("WeightFilter")]
@@ -48,12 +51,12 @@ public class UIController : MonoBehaviour
 	public TextMeshProUGUI ValueText_Alcohol;
 
 	[Space]
-	[Header("DepressionFilter")]
-	public Toggle Toggle_Depression;
+	[Header("GenderFilter")]
+	public TMP_Dropdown Dropdown_Gender;
 
 	[Space]
-	[Header("BurnoutFilter")]
-	public Toggle Toggle_Burnout;
+	[Header("MoodFilter")]
+	public TMP_Dropdown Dropdown_Mood;
 
 	[Space]
 	public Transform LeftJoystick;
@@ -61,6 +64,7 @@ public class UIController : MonoBehaviour
 	private void Start()
 	{
 		SetupGenderDropdown();
+		SetupMoodDropdown();
 	}
 
 	//Adding all functions for the UI by script
@@ -69,8 +73,8 @@ public class UIController : MonoBehaviour
 		if (Button_FilterMenu != null) Button_FilterMenu.onClick.AddListener(OnFilterMenuButton);
 
 		if (Toggle_Age != null) Toggle_Age.onValueChanged.AddListener(OnAgeToggle);
-		if(Toggle_Weight != null) Toggle_Weight.onValueChanged.AddListener(OnWeightToggle);
-		if(Toggle_Height != null) Toggle_Height.onValueChanged.AddListener(OnHeightToggle);
+		if (Toggle_Weight != null) Toggle_Weight.onValueChanged.AddListener(OnWeightToggle);
+		if (Toggle_Height != null) Toggle_Height.onValueChanged.AddListener(OnHeightToggle);
 		if (Toggle_Alcohol != null) Toggle_Alcohol.onValueChanged.AddListener(OnAlcoholToggle);
 
 		if (Slider_Age != null) Slider_Age.onValueChanged.AddListener(OnAgeSlider);
@@ -79,6 +83,7 @@ public class UIController : MonoBehaviour
 		if (Slider_Alcohol != null) Slider_Alcohol.onValueChanged.AddListener(OnAlcoholSlider);
 
 		if (Dropdown_Gender != null) Dropdown_Gender.onValueChanged.AddListener(OnGenderChanged);
+		if (Dropdown_Mood != null) Dropdown_Mood.onValueChanged.AddListener(OnMoodChanged);
 	}
 
 	private void OnDisable()
@@ -95,9 +100,10 @@ public class UIController : MonoBehaviour
 		if (Slider_Alcohol != null) Slider_Alcohol.onValueChanged.RemoveAllListeners();
 
 		if (Dropdown_Gender != null) Dropdown_Gender.onValueChanged.RemoveAllListeners();
+		if (Dropdown_Mood != null) Dropdown_Mood.onValueChanged.RemoveAllListeners();
 	}
 
-	//Open and close filter menu by toggle
+	//Open and close filter menu
 	void OnFilterMenuButton()
 	{
 		_filterToggle = !_filterToggle;
@@ -105,7 +111,7 @@ public class UIController : MonoBehaviour
 		LeftJoystick.position = _filterToggle ? new Vector3(1060, LeftJoystick.position.y, LeftJoystick.position.z) : new Vector3(256, LeftJoystick.position.y, LeftJoystick.position.z);
 	}
 
-	//Filter for gender by dropdown method
+	//Filter for gender
 	void SetupGenderDropdown()
 	{
 		if (Dropdown_Gender == null) return;
@@ -137,6 +143,42 @@ public class UIController : MonoBehaviour
 				break;
 			case Genders.Female:
 				print("Selected: Female");
+				break;
+		}
+	}
+
+	//Filter for moods
+	void SetupMoodDropdown()
+	{
+		if (Dropdown_Mood == null) return;
+
+		Dropdown_Mood.ClearOptions();
+
+		List<string> options = new List<string>();
+		foreach (var mood in System.Enum.GetValues(typeof(Moods)))
+		{
+			options.Add(mood.ToString());
+		}
+
+		Dropdown_Mood.AddOptions(options);
+		Dropdown_Mood.value = 0;
+		Dropdown_Mood.RefreshShownValue();
+	}
+
+	void OnMoodChanged(int index)
+	{
+		Moods selectedMood = (Moods)index;
+
+		switch (selectedMood)
+		{
+			case Moods.None:
+				print("Selected: None");
+				break;
+			case Moods.Depression:
+				print("Selected: Depression");
+				break;
+			case Moods.Burnout:
+				print("Selected: Burnout");
 				break;
 		}
 	}
